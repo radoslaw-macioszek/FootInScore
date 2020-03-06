@@ -1,0 +1,66 @@
+.table-container.container {
+    background-color: #3e573f;
+}
+
+.segment-container.segment {
+    background-color: #3b3b3bfa;
+    border: none;
+    padding-left: 25%;
+}
+
+.table-container.header {
+    background-image: url(../../images/tapeta5.jpg);
+    background-position: center top;
+    background-size: 1440px 230px;
+    padding-left: 70px;
+    padding-top: 35px;
+    border-radius: 50px;
+    width: 100%;
+    height: 230px;
+}
+.center {
+    padding-left: 35%;
+    font-size: 50px;
+}
+.lefts {
+    padding-left: 10px;
+    font-size: 40px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana,
+        sans-serif;
+    color: black;
+}
+button {
+    background-color: #cac9c9fa;
+    border: rgb(46, 44, 44);
+    margin: 2px;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+
+    box-shadow: 0px 10px 21px -7px #0f0f0f;
+    background: linear-gradient(to bottom, #b3b2b2 5%, #abadad 100%);
+    display: inline-block;
+    cursor: pointer;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+button:hover {
+    box-shadow: inset 0 0 0 2em var(--hover);
+}
+
+.buttons {
+    margin-left: 50px;
+    padding-bottom: 5px;
+}
+
+.back {
+    background-color: #222121;
+}
+
+.icon {
+    position: relative;
+    top: 2px;
+    right: 2px;
+}

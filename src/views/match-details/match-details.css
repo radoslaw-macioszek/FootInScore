@@ -1,0 +1,51 @@
+.match-container {
+}
+
+.match-container.details {
+    margin: 0;
+}
+.match-container.ui.clearing.segment {
+    margin: 0;
+    padding: 0;
+    padding-right: 60px;
+    color: white;
+}
+
+.ui.horizontal.segments {
+    background-color: #9b9898fa;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.details {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.team-left {
+    margin: 0;
+}
+
+.team-right {
+    margin: 0;
+}
+
+.team-names {
+    display: flex;
+    align-items: center;
+    justify-Content: space-around;
+}
+
+.team.segment {
+    display: flex;
+    align-Items: center;
+    justify-Content: center;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h2 {
+    font-size: 30px;
+}

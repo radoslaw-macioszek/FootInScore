@@ -1,0 +1,18 @@
+.schedule {
+    background-color: #9b9898fa;
+}
+
+.matches-segments.segment {
+    background-color: #cccacafa;
+}
+
+.basic-button {
+    padding: 50px;
+}
+
+h4 {
+    padding-top: 5px;
+    padding-left: 15%;
+    font-size: 23px;
+    color: #1a1919;
+}
