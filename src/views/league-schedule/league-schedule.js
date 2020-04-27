@@ -1,86 +1,181 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from 'react-loader-spinner';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "react-loader-spinner";
+import Button from "../../components/Button/Button";
+import styled from "styled-components";
 
 import {
-    loadSchedulesAction,
-    nextSchedule,
-    previousSchedule,
-    currentSchedule
-} from '../../state/schedules/schedules.reducer';
-import { Link } from 'react-router-dom';
+	loadSchedulesAction,
+	nextSchedule,
+	previousSchedule,
+} from "../../state/schedules/schedules.reducer";
 
-import './league-schedule.css';
-import { IoMdFootball, IoMdArrowForward, IoMdArrowBack } from 'react-icons/io';
-import { FaTable } from 'react-icons/fa';
-import { AiOutlineSchedule } from 'react-icons/ai';
+import "./league-schedule.css";
+import { IoMdArrowForward, IoMdArrowBack } from "react-icons/io";
+
+import MiddleBar from "../../components/MiddleBar/MiddleBar";
+
+const StyledButtons = styled.div`
+	display: flex;
+	position: absolute;
+	top: 295px;
+	left: 29vw;
+
+	@media (max-width: 1030px) {
+		top: 270px;
+		left: 300px;
+	}
+
+	@media (max-width: 768px) {
+		top: 170px;
+		left: 100px;
+	}
+`;
+
+const StyledWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	margin-top: 10rem;
+	font-size: 2rem;
+
+	@media (max-width: 768px) {
+		margin-left: 1rem;
+		margin-top: 3rem;
+		font-size: 1.8rem;
+	}
+	@media (max-width: 420px) {
+		margin-left: 1rem;
+		margin-top: 3rem;
+		font-size: 1rem;
+	}
+`;
+
+const StyledHeader = styled.p`
+	font-size: 2.5rem;
+	margin: 0 10px;
+
+	@media (max-width: 768px) {
+		font-size: 1.5rem;
+	}
+`;
+
+const StyledCenter = styled.span`
+	margin: 0 50px;
+`;
+
+const StyledLi = styled.li`
+	width: 700px;
+	list-style: none;
+	display: flex;
+
+	@media (max-width: 768px) {
+		width: 500px;
+	}
+	@media (max-width: 420px) {
+		width: 400px;
+	}
+`;
+
+const RightSpan = styled.span`
+	width: 300px;
+	display: flex;
+	justify-content: flex-end;
+
+	@media (max-width: 768px) {
+		width: 200px;
+	}
+	@media (max-width: 420px) {
+		width: 150px;
+	}
+`;
+
+const LeftSpan = styled.span`
+	width: 300px;
+	@media (max-width: 768px) {
+		width: 200px;
+	}
+	@media (max-width: 420px) {
+		width: 150px;
+	}
+`;
+
+const StyledArrows = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+
+	margin-bottom: 2rem;
+	margin-top: 5rem;
+
+	@media (max-width: 768px) {
+	}
+`;
+
+const StyledButton = styled(Button)`
+	height: 20px;
+	width: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	text-align: center;
+	font-size: 1rem;
+	padding: 0;
+`;
 
 const LeagueSchedule = () => {
-    const dispatch = useDispatch();
-    const isLoading = useSelector((state) => state.schedulesReducer.loading);
-    const schedules = useSelector((state) => state.schedulesReducer.data.matches);
-    const schedulesInfo = useSelector((state) => state.schedulesReducer.data);
-    const competitions = useSelector((state) => state.standingsReducer.data.data);
-    const next = useSelector((state) => state.schedulesReducer.nextMatchday);
-    const next2 = parseInt(next);
+	const dispatch = useDispatch();
+	const isLoading = useSelector((state) => state.schedulesReducer.loading);
+	const schedules = useSelector((state) => state.schedulesReducer.data.matches);
+	const schedulesInfo = useSelector((state) => state.schedulesReducer.data);
+	const competitions = useSelector((state) => state.standingsReducer.data.data);
+	const next = useSelector((state) => state.schedulesReducer.nextMatchday);
 
-    useEffect(
-        () => {
-            dispatch(loadSchedulesAction());
-        },
-        [ dispatch ]
-    );
+	useEffect(() => {
+		dispatch(loadSchedulesAction());
+	}, [dispatch]);
 
-    return isLoading ? (
-        <Loader className="loader" type="ThreeDots" />
-    ) : (
-        <div className="back">
-            <div className="table-container ui container segment">
-                <div className="segments-container ui container segment">
-                    {competitions && (
-                        <Link to={`/leagues/${competitions.competition.id}`}>
-                            <button>
-                                <FaTable className="icon" /> Standings / Tabela
-                            </button>
-                        </Link>
-                    )}
-                    <Link to={`/schedule/`}>
-                        <button>
-                            <IoMdFootball className="icon" /> Results / Wyniki
-                        </button>
-                    </Link>
-                    <Link to={`/timetable/`} onClick={() => dispatch(currentSchedule(next2))}>
-                        <button>
-                            <AiOutlineSchedule className="icon" /> Timetable / Terminarz
-                        </button>
-                    </Link>
-                </div>
-                <div className="matches-container ui container segment">
-                    <div>
-                        <div>
-                            <h3>{schedulesInfo && schedulesInfo.filters && schedulesInfo.filters.matchday}. kolejka</h3>
-                            <button onClick={() => dispatch(previousSchedule())}>
-                                <IoMdArrowBack className="icon" />
-                            </button>
-                            <button onClick={() => dispatch(nextSchedule())}>
-                                <IoMdArrowForward className="icon" />
-                            </button>
-                        </div>
+	if (isLoading) {
+		return <Loader className="loader" type="ThreeDots" />;
+	}
 
-                        <div className="schedule">
-                            {schedules &&
-                                schedules.map((match) => (
-                                    <div key={match.id} className="matches-segments ui segment">
-                                        {match.homeTeam.name} <strong>{match.score.fullTime.homeTeam}</strong> -{' '}
-                                        <strong>{match.score.fullTime.awayTeam}</strong> {match.awayTeam.name}
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+	return (
+		<div>
+			<StyledButtons>{competitions && <MiddleBar />}</StyledButtons>
+			<StyledWrapper>
+				<StyledArrows>
+					<StyledButton onClick={() => dispatch(previousSchedule())}>
+						<IoMdArrowBack className="icon" />
+					</StyledButton>
+					<StyledHeader>
+						{schedulesInfo &&
+							schedulesInfo.filters &&
+							schedulesInfo.filters.matchday}
+						. kolejka
+					</StyledHeader>
+					<StyledButton onClick={() => dispatch(nextSchedule())}>
+						<IoMdArrowForward className="icon" />
+					</StyledButton>
+				</StyledArrows>
+				<ul>
+					{schedules &&
+						schedules.map((match) => (
+							<StyledLi key={match.id}>
+								<RightSpan>{match.homeTeam.name}</RightSpan>
+								<strong>{match.score.fullTime.homeTeam}</strong>
+								<StyledCenter>-</StyledCenter>
+								<strong>{match.score.fullTime.awayTeam}</strong>
+								<LeftSpan>{match.awayTeam.name}</LeftSpan>
+							</StyledLi>
+						))}
+				</ul>
+			</StyledWrapper>
+		</div>
+	);
 };
 
 export default LeagueSchedule;

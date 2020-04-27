@@ -1,105 +1,96 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { loadMatchesAction } from '../../state/matches/matches.reducer';
-import { loadLeaguesAction } from '../../state/leagues/leagues.reducer';
-import Loader from 'react-loader-spinner';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadLeaguesAction } from "../../state/leagues/leagues.reducer";
+import Loader from "react-loader-spinner";
+import styled from "styled-components";
 
-import './home.css';
-import Flag from 'react-world-flags';
+import LeftBar from "../../components/LeftBar/LeftBar";
+import MatchList from "../../components/MatchList/MatchList";
 
-import { Link } from 'react-router-dom';
+import TeamsBar from "../../components/TeamsBar/TeamsBar";
+import Button from "../../components/Button/Button";
+
+import "./home.css";
+
+const StyledHeading = styled.h2`
+	padding: 5px 10px;
+	margin: 10px 5px;
+	font-size: 2.5rem;
+
+	@media (max-width: 768px) {
+		font-size: 1.6rem;
+	}
+`;
+
+const StyledWrapper = styled.div`
+	display: flex;
+`;
+
+const StyledMatches = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	margin-left: 15rem;
+	@media (max-width: 1030px) {
+		margin-top: 8rem;
+	}
+
+	@media (max-width: 768px) {
+		margin-left: 2rem;
+	}
+	@media (max-width: 325px) {
+		margin-left: 1rem;
+	}
+`;
+
+const StyledButtonIcon = styled(Button)`
+	border-radius: 5rem;
+
+	position: fixed;
+	bottom: 4rem;
+	right: 4rem;
+
+	z-index: 100000000;
+
+	@media (max-width: 768px) {
+		font-size: 1.2rem;
+		bottom: 4rem;
+	}
+`;
 
 const Home = () => {
-    const dispatch = useDispatch();
-    const isLoading = useSelector((state) => state.matchesReducer.loading);
-    const matches = useSelector((state) => state.matchesReducer.data.matches);
+	const dispatch = useDispatch();
+	const isLoading = useSelector((state) => state.matchesReducer.loading);
+	const [barVisible, setBarVisibility] = useState(false);
 
-    const competitions = useSelector((state) => state.leaguesReducer.data.competitions);
+	useEffect(() => {
+		dispatch(loadLeaguesAction());
+	}, [dispatch]);
 
-    useEffect(
-        () => {
-            if (!matches) {
-                dispatch(loadMatchesAction());
-            }
-        },
-        [ dispatch ]
-    );
+	if (isLoading) {
+		return <Loader className="loader" type="ThreeDots" />;
+	}
 
-    useEffect(
-        () => {
-            dispatch(loadLeaguesAction());
-        },
-        [ dispatch ]
-    );
+	return (
+		<StyledWrapper>
+			<LeftBar />
+			<StyledMatches>
+				<StyledHeading> Today's matches: </StyledHeading>
+				<MatchList />
+			</StyledMatches>
+			<StyledButtonIcon onClick={() => setBarVisibility(!barVisible)}>
+				Match Details
+			</StyledButtonIcon>
 
-    if (isLoading) {
-        return <Loader className="loader" type="ThreeDots" />;
-    }
-
-    return (
-        <div className="back">
-            <div className="table-container ui container segment">
-                <div className="segments-container ui segment">
-                    {competitions &&
-                        competitions.map((competition) => (
-                            <Link to={`/leagues/${competition.id}`} key={competition.id}>
-                                <button>
-                                    <Flag
-                                        code={
-                                            competition.area.countryCode === 'ENG' ? (
-                                                'GB-ENG'
-                                            ) : (
-                                                competition.area.countryCode
-                                            )
-                                        }
-                                        height="11"
-                                    />
-                                    {competition.name}
-                                </button>
-                            </Link>
-                        ))}
-                </div>
-                <div className="matches-container ui segment">
-                    <h2>Today's matches: </h2>
-                    <div className="matches">
-                        {`${matches && Object.keys(matches).length === 0 ? 'no matches available' : ''}`}
-                    </div>
-                    {matches &&
-                        matches.map((match) => {
-                            const today = new Date(`${match.utcDate}`);
-                            let hours = today.toLocaleTimeString();
-                            return (
-                                <div key={match.id}>
-                                    <br />
-                                    <Flag
-                                        code={
-                                            match.competition.area.code === 'ENG' ? (
-                                                'GB-ENG'
-                                            ) : (
-                                                match.competition.area.code
-                                            )
-                                        }
-                                        height="11"
-                                    />{' '}
-                                    <strong>{match.competition.area.name}:</strong> {match.competition.name} - {' '}
-                                    {`matchday: ${match.matchday}`}
-                                    <div className="matches">
-                                        <br />
-                                        {`${hours}`} {' '}
-                                        <Link style={{ color: 'black' }} to={`/details/${match.id}`} key={match.id}>
-                                            {match.homeTeam.name} - {match.awayTeam.name}
-                                        </Link>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                </div>
-            </div>
-        </div>
-    );
+			<TeamsBar isVisible={barVisible} />
+		</StyledWrapper>
+	);
 };
 
 export default Home;
 
 // /v2/competitions/{id}/standings
 // footballInfoScore
+
+// handleClose={handleVisibility}
